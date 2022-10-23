@@ -1,10 +1,9 @@
 package SwingCircles;
 
-import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class CircleKeyListener implements KeyListener {
+class CircleKeyListener implements KeyListener {
 
     private final CirclePanel panel;
     private boolean escape;
