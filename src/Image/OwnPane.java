@@ -33,6 +33,52 @@ class OwnPane extends JPanel implements KeyListener {
     public void keyPressed(KeyEvent e) {
         try {
             this.img = ImageIO.read(new File("./src/Image/borgir.jpeg"));
+
+            int width, height;
+            height = img.getHeight();
+            width = img.getWidth();
+            int[] rgbArr = new int[width * height];
+            rgbArr = img.getRGB(
+                0,
+                0,
+                width,
+                height,
+                rgbArr,
+                0,
+                width
+            );
+
+            for (int i = 0; i < rgbArr.length; i++) {
+                int pixel = rgbArr[i];
+
+                int alpha = (pixel >> 24) & 0x00_00_00_FF;
+                int red = (pixel >> 16) & 0x00_00_00_FF;
+                int green = (pixel >> 8) & 0x00_00_00_FF;
+                int blue = (pixel >> 0) & 0x00_00_00_FF;
+
+                red = 0xFF - red;
+                green = 0xFF - green;
+                blue = 0xFF - blue;
+
+                pixel = alpha;
+                pixel = pixel << 8;
+                pixel = pixel | red;
+
+                pixel = pixel << 8;
+                pixel = pixel | green;
+
+                pixel = pixel << 8;
+                pixel = pixel | blue;
+
+                rgbArr[i] = pixel;
+
+            }
+
+            img = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
+            img.setRGB(0,0, width, height, rgbArr, 0, width);
+            this.repaint();
+
+
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
@@ -57,14 +103,6 @@ class OwnPane extends JPanel implements KeyListener {
                 img.getHeight() / 4,
                 null
             );
-
-            Color c = new Color(img.getRGB(0,0));
-            print(
-                "" + c.getRed(),
-                "" + c.getGreen(),
-                "" + c.getBlue(),
-                "" + c.getAlpha()
-            );
         }
 
     }
@@ -74,6 +112,7 @@ class OwnPane extends JPanel implements KeyListener {
             System.out.println(arg);
         }
     }
+
 
     public void print(int... args){
         for (int arg : args) {
