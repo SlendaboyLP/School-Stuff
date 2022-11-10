@@ -14,7 +14,10 @@ class FilterPane extends JPanel {
     JButton fileChooserBtn;
     FilterableImage image;
     JButton currentZoomStatus;
+
+    //filter Buttons
     JButton negateButton;
+    JButton normalButton;
 
     FilterPane(FilterFrame frame) {
 
@@ -23,13 +26,25 @@ class FilterPane extends JPanel {
         setBackground(new Color(255, 255, 255));
         setLayout(null);
 
-        this.negateButton = new JButton("Negate Picture");
-        negateButton.setBounds(this.getWidth() - 140, 10, 120, 30);
+        this.normalButton = new JButton("Normalize");
+        normalButton.setBounds(this.getWidth() - 140, 10, 120, 30);
+        normalButton.addActionListener(e -> {
+            if(image == null) return;
+            image.normalFilter();
+            this.repaint();
+        });
+        add(normalButton);
+
+        this.negateButton = new JButton("Negate");
+        negateButton.setBounds(this.getWidth() - 140, 50, 120, 30);
         negateButton.addActionListener(e -> {
+            if(image == null) return;
             image.negativeFilter();
             this.repaint();
         });
         add(negateButton);
+
+
 
         //zoom button which shows current zoom, if clicked sets zoom back too 100%
         currentZoomStatus = new JButton("Zoom: 100%");
@@ -54,13 +69,12 @@ class FilterPane extends JPanel {
 
         //allows user to zoom in and out
         addMouseWheelListener((e -> {
-
             if(image == null) return;
 
             if(e.getWheelRotation() == -1){
                 if(image.getZoom() < 2.0 ){
                     image.setZoom(
-                            image.getZoom() + 0.1
+                            image.getZoom() + 0.05
                     );
                 }
             }
@@ -68,7 +82,7 @@ class FilterPane extends JPanel {
             if(e.getWheelRotation() == 1){
                 if(image.getZoom() > 0.2 ){
                     image.setZoom(
-                            image.getZoom() - 0.1
+                            image.getZoom() - 0.05
                     );
                 }
             }
@@ -83,8 +97,8 @@ class FilterPane extends JPanel {
         this.fileChooser.setFileFilter(
                 new FileNameExtensionFilter("JPG & PNG Images", "jpg", "gif", "jpeg", "png")
         );
-        this.fileChooserBtn = new JButton("Choose Image for Ball (1x1)");
-        fileChooserBtn.setBounds(10, 10, 160, 30);
+        this.fileChooserBtn = new JButton("Choose Image");
+        fileChooserBtn.setBounds(10, 10, 120, 30);
         this.fileChooserBtn.addActionListener(e -> {
             if (this.fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
                 try {

@@ -67,13 +67,21 @@ import java.awt.image.BufferedImage;
 
      /**here comes the filters*/
 
+     public void normalFilter(){
+         setImage(
+                 originalImage
+         );
+     }
+
      public void negativeFilter(){
+         normalFilter();
+
          int height, width;
          height = getImage().getHeight();
          width = getImage().getWidth();
 
          int [] rgbArray = new int[width * height];
-         rgbArray = getImage().getRGB(0,0,width,height,rgbArray,0,width);
+         rgbArray = originalImage.getRGB(0,0,width,height,rgbArray,0,width);
 
          for (int i = 0; i < height * width; i++){
              int pixel = rgbArray[i];
@@ -101,5 +109,13 @@ import java.awt.image.BufferedImage;
 
          setImage(new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR));
          getImage().setRGB(0,0,width, height, rgbArray, 0, width);
+     }
+
+     public void grayScale(){
+
+     }
+
+     public void blackAndWhite(){
+
      }
  }
