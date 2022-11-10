@@ -13,7 +13,8 @@ class FilterPane extends JPanel {
     JFileChooser fileChooser;
     JButton fileChooserBtn;
     FilterableImage image;
-    JLabel currentZoomStatus;
+    JButton currentZoomStatus;
+    JButton negateButton;
 
     FilterPane(FilterFrame frame) {
 
@@ -21,9 +22,25 @@ class FilterPane extends JPanel {
         setSize(frame.getWidth(), frame.getHeight());
         setBackground(new Color(255, 255, 255));
         setLayout(null);
-        currentZoomStatus = new JLabel("Zoom: 100%");
-        currentZoomStatus.setBounds(0,this.getHeight() - 60,90,30);
+
+        this.negateButton = new JButton("Negate Picture");
+        negateButton.setBounds(this.getWidth() - 140, 10, 120, 30);
+        negateButton.addActionListener(e -> {
+            image.negativeFilter();
+            this.repaint();
+        });
+        add(negateButton);
+
+        //zoom button which shows current zoom, if clicked sets zoom back too 100%
+        currentZoomStatus = new JButton("Zoom: 100%");
+        currentZoomStatus.setBounds(10,this.getHeight() - 75,120,30);
+        currentZoomStatus.addActionListener(e -> {
+            image.setZoom(1.0);
+            this.repaint();
+        });
         add(currentZoomStatus);
+
+
 
         //sets the default look and feel depending on operating system
         try {
@@ -67,7 +84,7 @@ class FilterPane extends JPanel {
                 new FileNameExtensionFilter("JPG & PNG Images", "jpg", "gif", "jpeg", "png")
         );
         this.fileChooserBtn = new JButton("Choose Image for Ball (1x1)");
-        fileChooserBtn.setBounds(0, 0, 160, 30);
+        fileChooserBtn.setBounds(10, 10, 160, 30);
         this.fileChooserBtn.addActionListener(e -> {
             if (this.fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
                 try {
