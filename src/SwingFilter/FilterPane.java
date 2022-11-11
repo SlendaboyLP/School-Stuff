@@ -21,6 +21,9 @@ class FilterPane extends JPanel {
     JButton grayScaleButton;
     JButton blackAndWhiteButton;
 
+    JButton bitOneButton;
+    JButton bitTwoButton;
+
     FilterPane(FilterFrame frame) {
 
         this.frame = frame;
@@ -55,15 +58,41 @@ class FilterPane extends JPanel {
         });
         add(grayScaleButton);
 
-        this.blackAndWhiteButton = new JButton("Black and White");
+        this.blackAndWhiteButton = new JButton("2 Bit Coloring");
         blackAndWhiteButton.setBounds(this.getWidth() - 140, 130, 120, 30);
         blackAndWhiteButton.addActionListener(e -> {
             if(image == null) return;
-            image.blackAndWhiteFilter();
+            image.setBitOne(bitOneButton.getBackground());
+            image.setBitTwo(bitTwoButton.getBackground());
+            image.twoBit();
             this.repaint();
         });
         add(blackAndWhiteButton);
 
+
+        this.bitOneButton = new JButton();
+        bitOneButton.setBackground(new Color(0,0,0));
+        bitOneButton.setBounds(this.getWidth() -  130, 170, 20, 20);
+        bitOneButton.addActionListener( e -> {
+            bitOneButton.setBackground(
+                JColorChooser.showDialog(null, "Bit one", null)
+            );
+            this.repaint();
+
+        });
+        add(bitOneButton);
+
+
+        this.bitTwoButton = new JButton();
+        bitTwoButton.setBackground(new Color(255,255,255));
+        bitTwoButton.setBounds(this.getWidth() - 50, 170, 20, 20);
+        bitTwoButton.addActionListener( e -> {
+            bitTwoButton.setBackground(
+                JColorChooser.showDialog(null, "Bit two", null)
+            );
+            this.repaint();
+        });
+        add(bitTwoButton);
 
         //sets the default look and feel depending on operating system
         try {
@@ -111,6 +140,7 @@ class FilterPane extends JPanel {
 
     private void addFileChooser() {
         this.fileChooser = new JFileChooser("\\\\sz-ybbs.ac.at\\shares\\homes\\a.zeitlhofer\\Pictures\\netz\\Camera Roll");
+//        this.fileChooser = new JFileChooser("\")
         this.fileChooser.setFileFilter(
                 new FileNameExtensionFilter("JPG & PNG Images", "jpg", "gif", "jpeg", "png")
         );

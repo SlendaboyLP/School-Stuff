@@ -10,9 +10,10 @@ class LinePanel extends JPanel {
     LineMouseHandler handler;
     ArrayList<Line> lines = new ArrayList<>();
     Color currColor;
-
     JButton colorChooserBtn;
     JTextField widthField;
+
+
 
     LinePanel(LineFrame frame){
         this.setSize(1280,720);
@@ -45,9 +46,7 @@ class LinePanel extends JPanel {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        lines.forEach(elem ->{
-            elem.draw(g);
-        });
+        lines.forEach(elem -> elem.draw(g));
 
         lines.add(new Line(
             handler.prevX,

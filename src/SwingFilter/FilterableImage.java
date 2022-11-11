@@ -1,5 +1,6 @@
 package SwingFilter;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
  class FilterableImage {
@@ -17,6 +18,24 @@ import java.awt.image.BufferedImage;
 
     //zoom level, 0.10x - 2.0x
     double zoom;
+
+     Color bitOne, bitTwo;
+
+     public Color getBitOne() {
+         return bitOne;
+     }
+
+     public Color getBitTwo() {
+         return bitTwo;
+     }
+
+     public void setBitOne(Color bitOne) {
+         this.bitOne = bitOne;
+     }
+
+     public void setBitTwo(Color bitTwo) {
+         this.bitTwo = bitTwo;
+     }
 
     FilterableImage(BufferedImage image, int currWidth, int currHeight) {
         this.image = image;
@@ -153,7 +172,7 @@ import java.awt.image.BufferedImage;
          getImage().setRGB(0,0,width, height, rgbArray, 0, width);
      }
 
-     public void blackAndWhiteFilter(){
+     public void twoBit(){
          normalFilter();
 
          int height, width;
@@ -174,14 +193,15 @@ import java.awt.image.BufferedImage;
              int average = (red + green + blue) / 3;
 
              if(average > 128){
-                 red   = 0xFF;
-                 green = 0xFF;
-                 blue  = 0xFF;
+                 red   = bitOne.getRed();
+                 green = bitOne.getGreen();
+                 blue  = bitOne.getBlue();
              }
              else {
-                 red   = 0x00;
-                 green = 0x00;
-                 blue  = 0x00;
+
+                 red   = bitTwo.getRed();
+                 green = bitTwo.getGreen();
+                 blue  = bitTwo.getBlue();
              }
 
 
@@ -200,4 +220,6 @@ import java.awt.image.BufferedImage;
          setImage(new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR));
          getImage().setRGB(0,0,width, height, rgbArray, 0, width);
      }
+
+
  }
