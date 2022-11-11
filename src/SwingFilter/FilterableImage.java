@@ -193,23 +193,25 @@ import java.awt.image.BufferedImage;
              int average = (red + green + blue) / 3;
 
              if(average > 128){
-                 red   = bitOne.getRed();
-                 green = bitOne.getGreen();
-                 blue  = bitOne.getBlue();
-             }
-             else {
-
                  red   = bitTwo.getRed();
                  green = bitTwo.getGreen();
                  blue  = bitTwo.getBlue();
+
+             }
+             else {
+                 red   = bitOne.getRed();
+                 green = bitOne.getGreen();
+                 blue  = bitOne.getBlue();
              }
 
 
              pixel = alpha;
              pixel = pixel << 8;
              pixel = pixel | red;
+
              pixel = pixel << 8;
              pixel = pixel | green;
+
              pixel = pixel << 8;
              pixel = pixel | blue;
 
@@ -221,5 +223,48 @@ import java.awt.image.BufferedImage;
          getImage().setRGB(0,0,width, height, rgbArray, 0, width);
      }
 
+
+    public void changeBrightness(int amount){
+
+
+        int height, width;
+        height = getImage().getHeight();
+        width = getImage().getWidth();
+
+        int [] rgbArray = new int[width * height];
+        rgbArray = originalImage.getRGB(0,0,width,height,rgbArray,0,width);
+
+        for (int i = 0; i < height * width; i++){
+            int pixel = rgbArray[i];
+
+
+            int alpha = (pixel >> 24) & 0x00_00_00_FF;
+            int red   = (pixel >> 16) & 0x00_00_00_FF;
+            int green = (pixel >> 8)  & 0x00_00_00_FF;
+            int blue  = (pixel >> 0)  & 0x00_00_00_FF;
+
+            alpha = (pixel >> 24) & 0x00_00_00_FF;
+            red   *= ((double) amount / 100);
+            green *= ((double) amount / 100);
+            blue  *= ((double) amount / 100);
+
+
+
+
+            pixel = alpha;
+            pixel = pixel << 8;
+            pixel = pixel | red;
+            pixel = pixel << 8;
+            pixel = pixel | green;
+            pixel = pixel << 8;
+            pixel = pixel | blue;
+
+            rgbArray[i] = pixel;
+
+        }
+
+        setImage(new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR));
+        getImage().setRGB(0,0,width, height, rgbArray, 0, width);
+    }
 
  }
