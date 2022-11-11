@@ -13,12 +13,11 @@ class LinePanel extends JPanel {
     JButton colorChooserBtn;
     JTextField widthField;
 
-
-
     LinePanel(LineFrame frame){
         this.setSize(1280,720);
         this.frame = frame;
         this.handler = new LineMouseHandler(this);
+        this.setBackground(new Color(255,255,255));
 
         this.widthField = new JTextField("2");
         this.widthField.setBounds(1160, 50, 100, 30);

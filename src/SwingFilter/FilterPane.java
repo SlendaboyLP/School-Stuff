@@ -35,11 +35,11 @@ class FilterPane extends JPanel {
     FilterPane(FilterFrame frame) {
 
         //sets the default look and feel depending on operating system
-//        try {
-//            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-//        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
-//            e.printStackTrace();
-//        }
+        /*try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }*/
 
 
         this.frame = frame;
@@ -128,13 +128,10 @@ class FilterPane extends JPanel {
         brightnessSlider.setPaintLabels(true);
         brightnessSlider.addChangeListener(e -> {
             if(image == null) return;
-            System.out.println(brightnessSlider.getValue());
             image.changeBrightness(brightnessSlider.getValue());
             this.repaint();
         });
         add(brightnessSlider);
-
-
 
 
 
@@ -183,7 +180,8 @@ class FilterPane extends JPanel {
     }
 
     private void addFileChooser() {
-        this.fileChooser = new JFileChooser("\\\\sz-ybbs.ac.at\\shares\\homes\\a.zeitlhofer\\Pictures\\netz\\Camera Roll");
+
+        this.fileChooser = new JFileChooser("\\\\sz-ybbs.ac.at\\shares\\homes\\a.zeitlhofer\\Pictures\\Camera Roll");
 //        this.fileChooser = new JFileChooser("\")
 
 

@@ -84,7 +84,7 @@ class BallPanel extends JPanel {
 
     //allows User to use image from their computer as the image for the ball
     private void addFileChooser(){
-        this.fileChooser = new JFileChooser("\\\\sz-ybbs.ac.at\\shares\\homes\\a.zeitlhofer\\Pictures\\InfoTag");
+        this.fileChooser = new JFileChooser("\\\\sz-ybbs.ac.at\\shares\\homes\\a.zeitlhofer\\Pictures\\Camera Roll");
 
         this.fileChooser.setFileFilter(
             new FileNameExtensionFilter("JPG & PNG Images", "jpg", "gif", "jpeg", "png")

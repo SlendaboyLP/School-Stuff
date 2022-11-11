@@ -102,10 +102,12 @@ public class ButtonsPanel extends JPanel implements ActionListener{
             operandNumbs[1] = operands.length > 2 ? Double.parseDouble(operands[2]) : Double.parseDouble(operands[1]);
 
             switch (selectedMethod){
-                case '+' -> answer = operandNumbs[0] + operandNumbs[1];
-                case '-' -> answer = operandNumbs[0] - operandNumbs[1];
-                case '*' -> answer = operandNumbs[0] * operandNumbs[1];
-                case '/' -> answer = operandNumbs[0] / operandNumbs[1];
+                case '+' : {
+                    answer = operandNumbs[0] + operandNumbs[1];
+                }
+                case '-' : answer = operandNumbs[0] - operandNumbs[1];
+                case '*' : answer = operandNumbs[0] * operandNumbs[1];
+                case '/' : answer = operandNumbs[0] / operandNumbs[1];
             }
 
             t1.setText("" + answer);
