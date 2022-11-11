@@ -22,16 +22,10 @@ class FilterPane extends JPanel {
     JButton normalButton;
     JButton grayScaleButton;
     JButton twoBitButton;
-
-
     JButton bitOneButton;
     JButton bitTwoButton;
 
     JSlider brightnessSlider;
-
-
-
-
     FilterPane(FilterFrame frame) {
 
         //sets the default look and feel depending on operating system
@@ -86,7 +80,7 @@ class FilterPane extends JPanel {
         });
         add(grayScaleButton);
 
-        this.twoBitButton = new JButton("2 Bit");
+        this.twoBitButton = new JButton("1 Bit");
         twoBitButton.setBounds(this.getWidth() - 180, 130, 160, 30);
         twoBitButton.addActionListener(e -> {
             if(image == null) return;
@@ -133,9 +127,6 @@ class FilterPane extends JPanel {
         });
         add(brightnessSlider);
 
-
-
-
         //zoom button which shows current zoom, if clicked sets zoom back too 100%
         currentZoomStatus = new JButton("Zoom: 100%");
         currentZoomStatus.setBounds(10,this.getHeight() - 75,120,30);
@@ -170,11 +161,8 @@ class FilterPane extends JPanel {
         }));
 
 
-
-
         //adds the filechooser with its button, duh
         addFileChooser();
-
 
 
     }
