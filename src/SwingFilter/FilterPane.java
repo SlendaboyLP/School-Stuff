@@ -18,6 +18,8 @@ class FilterPane extends JPanel {
     //filter Buttons
     JButton negateButton;
     JButton normalButton;
+    JButton grayScaleButton;
+    JButton blackAndWhiteButton;
 
     FilterPane(FilterFrame frame) {
 
@@ -44,17 +46,23 @@ class FilterPane extends JPanel {
         });
         add(negateButton);
 
-
-
-        //zoom button which shows current zoom, if clicked sets zoom back too 100%
-        currentZoomStatus = new JButton("Zoom: 100%");
-        currentZoomStatus.setBounds(10,this.getHeight() - 75,120,30);
-        currentZoomStatus.addActionListener(e -> {
-            image.setZoom(1.0);
+        this.grayScaleButton = new JButton("Grayscale");
+        grayScaleButton.setBounds(this.getWidth() - 140, 90, 120, 30);
+        grayScaleButton.addActionListener(e -> {
+            if(image == null) return;
+            image.grayScaleFilter();
             this.repaint();
         });
-        add(currentZoomStatus);
+        add(grayScaleButton);
 
+        this.blackAndWhiteButton = new JButton("Black and White");
+        blackAndWhiteButton.setBounds(this.getWidth() - 140, 130, 120, 30);
+        blackAndWhiteButton.addActionListener(e -> {
+            if(image == null) return;
+            image.blackAndWhiteFilter();
+            this.repaint();
+        });
+        add(blackAndWhiteButton);
 
 
         //sets the default look and feel depending on operating system
@@ -66,6 +74,15 @@ class FilterPane extends JPanel {
 
         //adds the filechooser with its button, duh
         addFileChooser();
+
+        //zoom button which shows current zoom, if clicked sets zoom back too 100%
+        currentZoomStatus = new JButton("Zoom: 100%");
+        currentZoomStatus.setBounds(10,this.getHeight() - 75,120,30);
+        currentZoomStatus.addActionListener(e -> {
+            image.setZoom(1.0);
+            this.repaint();
+        });
+        add(currentZoomStatus);
 
         //allows user to zoom in and out
         addMouseWheelListener((e -> {
@@ -93,7 +110,7 @@ class FilterPane extends JPanel {
     }
 
     private void addFileChooser() {
-        this.fileChooser = new JFileChooser();
+        this.fileChooser = new JFileChooser("\\\\sz-ybbs.ac.at\\shares\\homes\\a.zeitlhofer\\Pictures\\netz\\Camera Roll");
         this.fileChooser.setFileFilter(
                 new FileNameExtensionFilter("JPG & PNG Images", "jpg", "gif", "jpeg", "png")
         );

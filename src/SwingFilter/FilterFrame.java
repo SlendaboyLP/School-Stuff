@@ -8,6 +8,7 @@ class FilterFrame extends JFrame {
         setLocationRelativeTo(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setContentPane(new FilterPane(this));
+        
         this.setVisible(true);
     }
 
