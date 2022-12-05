@@ -27,6 +27,7 @@ public class PongPane extends JPanel {
 
         this.addKeyListener(handler);
         this.addMouseWheelListener(handler);
+        this.addMouseMotionListener(handler);
 
         setVisible(true);
     }

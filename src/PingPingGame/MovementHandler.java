@@ -1,11 +1,8 @@
 package PingPingGame;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
+import java.awt.event.*;
 
-class MovementHandler implements KeyListener, MouseWheelListener {
+class MovementHandler implements KeyListener, MouseWheelListener, MouseMotionListener {
     Entity[] entities;
     PongPane panel;
     Ball ball;
@@ -61,5 +58,15 @@ class MovementHandler implements KeyListener, MouseWheelListener {
             );
         }
         panel.repaint();
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        System.out.println("mouse moved");
     }
 }
