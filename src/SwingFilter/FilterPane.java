@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 
 class FilterPane extends JPanel {
+
     FilterFrame frame;
     JFileChooser fileChooser;
     JButton fileChooserBtn;
@@ -24,8 +25,12 @@ class FilterPane extends JPanel {
     JButton twoBitButton;
     JButton bitOneButton;
     JButton bitTwoButton;
-
     JSlider brightnessSlider;
+    JSlider opacitySlider;
+    JButton sepiaButton;
+
+    JButton flipHeadover;
+
     FilterPane(FilterFrame frame) {
 
         //sets the default look and feel depending on operating system
@@ -36,10 +41,12 @@ class FilterPane extends JPanel {
         }*/
 
 
+
         this.frame = frame;
         setSize(frame.getWidth(), frame.getHeight());
         setBackground(new Color(255, 255, 255));
         setLayout(null);
+
 
         this.downloadButton = new JButton("Download");
         downloadButton.setBounds(this.getWidth() - 160, this.getHeight() - 75, 140, 30);
@@ -59,6 +66,8 @@ class FilterPane extends JPanel {
             if(image == null) return;
             image.normalFilter();
             this.repaint();
+            brightnessSlider.setValue(100);
+            opacitySlider.setValue(100);
         });
         add(normalButton);
 
@@ -127,6 +136,38 @@ class FilterPane extends JPanel {
         });
         add(brightnessSlider);
 
+        this.opacitySlider = new JSlider(JSlider.HORIZONTAL, 0, 100,100);
+        opacitySlider.setBounds(this.getWidth() - 180, 270, 160, 50);
+        opacitySlider.setMinorTickSpacing(5);
+        opacitySlider.setMajorTickSpacing(20);
+        opacitySlider.setPaintTicks(true);
+        opacitySlider.setPaintLabels(true);
+        opacitySlider.addChangeListener(e -> {
+            if(image == null) return;
+            image.changeOpacity(opacitySlider.getValue());
+            this.repaint();
+        });
+        add(opacitySlider);
+
+        this.sepiaButton = new JButton("Sepia");
+        sepiaButton.setBounds(this.getWidth() - 180, 330, 160, 30);
+        sepiaButton.addActionListener(e -> {
+            if(image == null) return;
+            image.sepiaFilter();
+            this.repaint();
+        });
+        add(sepiaButton);
+
+
+        this.flipHeadover = new JButton("Flip Headover");
+        flipHeadover.setBounds(this.getWidth() - 180, 370, 160, 30);
+        flipHeadover.addActionListener(e -> {
+            if(image == null) return;
+            image.flipHeadover();
+            this.repaint();
+        });
+        add(flipHeadover);
+
         //zoom button which shows current zoom, if clicked sets zoom back too 100%
         currentZoomStatus = new JButton("Zoom: 100%");
         currentZoomStatus.setBounds(10,this.getHeight() - 75,120,30);
@@ -136,10 +177,8 @@ class FilterPane extends JPanel {
         });
         add(currentZoomStatus);
 
-
-
         //allows user to zoom in and out
-        addMouseWheelListener((e -> {
+        addMouseWheelListener(e -> {
             if(image == null) return;
 
             if(e.getWheelRotation() == -1){
@@ -158,8 +197,7 @@ class FilterPane extends JPanel {
                 }
             }
             this.repaint();
-        }));
-
+        });
 
         //adds the filechooser with its button, duh
         addFileChooser();

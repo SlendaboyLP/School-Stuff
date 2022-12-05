@@ -1,9 +1,12 @@
 package SwingFilter;
 
+import javax.sound.sampled.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
- class FilterableImage {
+class FilterableImage {
 
 
     //Image shown
@@ -21,13 +24,8 @@ import java.awt.image.BufferedImage;
 
      Color bitOne, bitTwo;
 
-     public Color getBitOne() {
-         return bitOne;
-     }
-
-     public Color getBitTwo() {
-         return bitTwo;
-     }
+     int spinCounter = 0;
+     int sepiaCount = 0;
 
      public void setBitOne(Color bitOne) {
          this.bitOne = bitOne;
@@ -90,10 +88,12 @@ import java.awt.image.BufferedImage;
          setImage(
                  originalImage
          );
+         spinCounter = 0;
+         sepiaCount = 0;
      }
 
      public void negativeFilter(){
-         normalFilter();
+//         normalFilter();
 
          int height, width;
          height = getImage().getHeight();
@@ -133,7 +133,7 @@ import java.awt.image.BufferedImage;
      }
 
      public void grayScaleFilter(){
-         normalFilter();
+//         normalFilter();
 
          int height, width;
          height = getImage().getHeight();
@@ -173,7 +173,7 @@ import java.awt.image.BufferedImage;
      }
 
      public void twoBit(){
-         normalFilter();
+//         normalFilter();
 
          int height, width;
          height = getImage().getHeight();
@@ -226,7 +226,6 @@ import java.awt.image.BufferedImage;
 
     public void changeBrightness(int amount){
 
-
         int height, width;
         height = getImage().getHeight();
         width = getImage().getWidth();
@@ -248,7 +247,119 @@ import java.awt.image.BufferedImage;
             green *= ((double) amount / 100);
             blue  *= ((double) amount / 100);
 
+            pixel = alpha;
+            pixel = pixel << 8;
+            pixel = pixel | red;
+            pixel = pixel << 8;
+            pixel = pixel | green;
+            pixel = pixel << 8;
+            pixel = pixel | blue;
 
+            rgbArray[i] = pixel;
+
+        }
+
+        setImage(new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR));
+        getImage().setRGB(0,0,width, height, rgbArray, 0, width);
+    }
+
+    public void changeOpacity(double opacity){
+
+         normalFilter();
+
+
+        int newOpacity = (int) (0xFE * (opacity / 100));
+
+        int height, width;
+        height = getImage().getHeight();
+        width = getImage().getWidth();
+
+        int [] rgbArray = new int[width * height];
+        rgbArray = getImage().getRGB(0,0,width,height,rgbArray,0,width);
+
+        for (int i = 0; i < height * width; i++){
+            int pixel = rgbArray[i];
+
+            int alpha = (pixel >> 24) & 0x00_00_00_FF;
+            int red   = (pixel >> 16) & 0x00_00_00_FF;
+            int green = (pixel >> 8)  & 0x00_00_00_FF;
+            int blue  = (pixel >> 0)  & 0x00_00_00_FF;
+
+
+            alpha = newOpacity - alpha;
+
+            pixel = alpha;
+            pixel = pixel << 8;
+            pixel = pixel | red;
+            pixel = pixel << 8;
+            pixel = pixel | green;
+            pixel = pixel << 8;
+            pixel = pixel | blue;
+
+            rgbArray[i] = pixel;
+
+        }
+
+        setImage(new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR));
+        getImage().setRGB(0,0,width, height, rgbArray, 0, width);
+    }
+
+    public void sepiaFilter(){
+//        normalFilter();
+
+
+        sepiaCount++;
+
+        if(sepiaCount == 10){
+
+            String soundName = "./src/SwingFilter/scott.wav";
+            AudioInputStream audioInputStream = null;
+            try {
+                audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
+            } catch (UnsupportedAudioFileException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            Clip clip = null;
+            try {
+                clip = AudioSystem.getClip();
+            } catch (LineUnavailableException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                clip.open(audioInputStream);
+            } catch (LineUnavailableException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            clip.start();
+        }
+
+        int height, width;
+        height = getImage().getHeight();
+        width = getImage().getWidth();
+
+        int [] rgbArray = new int[width * height];
+        rgbArray = getImage().getRGB(0,0,width,height,rgbArray,0,width);
+
+        for (int i = 0; i < height * width; i++){
+            int pixel = rgbArray[i];
+
+            int alpha = (pixel >> 24) & 0x00_00_00_FF;
+            int red   = (pixel >> 16) & 0x00_00_00_FF;
+            int green = (pixel >> 8)  & 0x00_00_00_FF;
+            int blue  = (pixel >> 0)  & 0x00_00_00_FF;
+
+
+            int newRed = (int) (0.393*red + 0.769*green + 0.189*blue);
+            int newGreen = (int) (0.349*red + 0.686*green + 0.168*blue);
+            int newBlue = (int) (0.272*red + 0.534*green + 0.131*blue);
+
+            red = Math.min(newRed, 255);
+            green = Math.min(newGreen, 255);
+            blue = Math.min(newBlue, 255);
 
 
             pixel = alpha;
@@ -266,5 +377,71 @@ import java.awt.image.BufferedImage;
         setImage(new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR));
         getImage().setRGB(0,0,width, height, rgbArray, 0, width);
     }
+
+
+     public void flipHeadover() {
+
+         spinCounter++;
+
+         if(spinCounter == 10){
+
+             String soundName = "./src/SwingFilter/right_round.wav";
+             AudioInputStream audioInputStream = null;
+             try {
+                 audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
+             } catch (UnsupportedAudioFileException e) {
+                 throw new RuntimeException(e);
+             } catch (IOException e) {
+                 throw new RuntimeException(e);
+             }
+             Clip clip = null;
+             try {
+                 clip = AudioSystem.getClip();
+             } catch (LineUnavailableException e) {
+                 throw new RuntimeException(e);
+             }
+             try {
+                 clip.open(audioInputStream);
+             } catch (LineUnavailableException e) {
+                 throw new RuntimeException(e);
+             } catch (IOException e) {
+                 throw new RuntimeException(e);
+             }
+             clip.start();
+         }
+
+//         normalFilter();
+
+         int height, width;
+         height = getImage().getHeight();
+         width = getImage().getWidth();
+
+         int [] rgbArray = new int[width * height];
+         rgbArray = getImage().getRGB(0,0,width,height,rgbArray,0,width);
+
+         for (int i = 0; i < (height * width) / 2; i++){
+             int pixel = rgbArray[i];
+             int secondPixel = rgbArray[(rgbArray.length - 1) - i];
+
+             int alpha = (pixel >> 24) & 0x00_00_00_FF;
+             int red   = (pixel >> 16) & 0x00_00_00_FF;
+             int green = (pixel >> 8)  & 0x00_00_00_FF;
+             int blue  = (pixel >> 0)  & 0x00_00_00_FF;
+//
+//             System.out.println("red " + red);
+//             System.out.println("green " + green);
+//             System.out.println("blue " + blue);
+
+             rgbArray[i] = secondPixel;
+             rgbArray[(rgbArray.length - 1) - i] = pixel;
+
+         }
+
+         setImage(new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR));
+         getImage().setRGB(0,0,width, height, rgbArray, 0, width);
+
+
+
+     }
 
  }
