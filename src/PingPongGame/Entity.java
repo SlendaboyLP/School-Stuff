@@ -1,4 +1,4 @@
-package PingPingGame;
+package PingPongGame;
 
 import java.awt.*;
 

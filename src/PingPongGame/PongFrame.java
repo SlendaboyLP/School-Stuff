@@ -1,4 +1,4 @@
-package PingPingGame;
+package PingPongGame;
 
 import javax.swing.*;
 

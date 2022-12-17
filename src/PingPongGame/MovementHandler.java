@@ -1,8 +1,8 @@
-package PingPingGame;
+package PingPongGame;
 
 import java.awt.event.*;
 
-class MovementHandler implements KeyListener, MouseWheelListener, MouseMotionListener {
+class MovementHandler implements KeyListener {
     Entity[] entities;
     PongPane panel;
     Ball ball;
@@ -21,7 +21,6 @@ class MovementHandler implements KeyListener, MouseWheelListener, MouseMotionLis
 
     @Override
     public void keyPressed(KeyEvent e) {
-        System.out.println("pressed");
         if(e.getKeyCode() == KeyEvent.VK_W){
             entities[0].setY(
                 entities[0].getY() - entities[0].getSpeed()
@@ -34,6 +33,19 @@ class MovementHandler implements KeyListener, MouseWheelListener, MouseMotionLis
             );
         }
 
+        if(e.getKeyCode() == KeyEvent.VK_UP){
+            entities[1].setY(
+                    entities[1].getY() - entities[1].getSpeed()
+            );
+
+        }
+
+        if(e.getKeyCode() == KeyEvent.VK_DOWN){
+            entities[1].setY(
+                    entities[1].getY() + entities[1].getSpeed()
+            );
+        }
+
         panel.repaint();
     }
 
@@ -42,31 +54,5 @@ class MovementHandler implements KeyListener, MouseWheelListener, MouseMotionLis
 
     }
 
-    @Override
-    public void mouseWheelMoved(MouseWheelEvent e) {
 
-        System.out.println("mouse wheel moved");
-
-        if(e.getWheelRotation() == 1){
-            entities[1].setY(
-                entities[1].getY() - entities[1].getSpeed() / 2
-            );
-
-        } else {
-            entities[1].setY(
-                entities[1].getY() + entities[1].getSpeed() / 2
-            );
-        }
-        panel.repaint();
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-        System.out.println("mouse moved");
-    }
 }

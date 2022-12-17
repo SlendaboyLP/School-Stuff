@@ -1,4 +1,4 @@
-package PingPingGame;
+package PingPongGame;
 import javax.swing.*;
 import java.awt.*;
 
@@ -26,8 +26,7 @@ public class PongPane extends JPanel {
         handler = new MovementHandler(ball, this, playerOne, playerTwo);
 
         this.addKeyListener(handler);
-        this.addMouseWheelListener(handler);
-        this.addMouseMotionListener(handler);
+
 
         setVisible(true);
     }
