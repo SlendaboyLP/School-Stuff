@@ -46,7 +46,26 @@ class MovementHandler implements KeyListener {
             );
         }
 
+
+        checkBounds();
+
         panel.repaint();
+    }
+
+    private void checkBounds() {
+        for (Entity entity : entities) {
+            if(entity.getY() <= 10){
+                entity.setY(10);
+            }
+
+            if(entity.getY() + entity.height + 10>= panel.getHeight()){
+                entity.setY(panel.getHeight() - entity.height - 10);
+            }
+        }
+
+
+
+
     }
 
     @Override

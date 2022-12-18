@@ -5,7 +5,7 @@ import javax.swing.*;
 class PongFrame extends JFrame {
     PongFrame(){
         super(Math.random() > 0.5 ? "Ping Pong" : "Pong Ping");
-        setSize(600,400);
+        setSize(1200,800);
         setLocationRelativeTo(null);
         setContentPane(new PongPane(this));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
