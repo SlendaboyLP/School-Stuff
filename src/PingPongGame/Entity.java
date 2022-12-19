@@ -7,7 +7,7 @@ class Entity {
     private int y;
     private int score;
 
-    final int speed = 10;
+    final int speed = 100;
 
     final int width = 20;
 

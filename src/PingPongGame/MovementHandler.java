@@ -2,7 +2,7 @@ package PingPongGame;
 
 import java.awt.event.*;
 
-class MovementHandler implements KeyListener {
+class MovementHandler implements KeyListener, MouseWheelListener {
     Entity[] entities;
     PongPane panel;
     Ball ball;
@@ -46,6 +46,28 @@ class MovementHandler implements KeyListener {
             );
         }
 
+        if(!panel.isPlayable){
+            if(e.getKeyCode() == KeyEvent.VK_SPACE){
+                ball.setCurX(( panel.getWidth() / 2 - 10));
+                ball.setCurY(( panel.getHeight() / 2 - 10));
+                ball.setPrevX(( panel.getWidth() / 2 - 10));
+                ball.setPrevY(( panel.getHeight() / 2 - 10));
+
+
+                ball.setVelX(Math.random() > 0.5 ? ball.getORIGINAL_SPEED() : -ball.getORIGINAL_SPEED());
+                ball.setVelY(Math.random() > 0.5 ? ball.getORIGINAL_SPEED() : -ball.getORIGINAL_SPEED());
+
+                panel.playerOne.setScore(0);
+                panel.playerTwo.setScore(0);
+
+                panel.playerOne.setY(panel.getHeight() / 2 - 70);
+                panel.playerTwo.setY(panel.getHeight() / 2 - 70);
+                panel.isPlayable = true;
+                panel.repaint();
+
+            }
+        }
+
 
         checkBounds();
 
@@ -63,9 +85,6 @@ class MovementHandler implements KeyListener {
             }
         }
 
-
-
-
     }
 
     @Override
@@ -74,4 +93,22 @@ class MovementHandler implements KeyListener {
     }
 
 
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        if(e.getWheelRotation() < 0){
+            entities[1].setY(
+                    entities[1].getY() - entities[1].getSpeed() / 3
+            );
+
+        } else {
+            entities[1].setY(
+                    entities[1].getY() + entities[1].getSpeed() / 3
+            );
+        }
+
+        checkBounds();
+
+        panel.repaint();
+
+    }
 }
