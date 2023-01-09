@@ -48,10 +48,10 @@ class MovementHandler implements KeyListener, MouseWheelListener {
 
         if(!panel.isPlayable){
             if(e.getKeyCode() == KeyEvent.VK_SPACE){
-                ball.setCurX(( panel.getWidth() / 2 - 10));
-                ball.setCurY(( panel.getHeight() / 2 - 10));
-                ball.setPrevX(( panel.getWidth() / 2 - 10));
-                ball.setPrevY(( panel.getHeight() / 2 - 10));
+                ball.setCurX(( panel.getWidth() / 2.0 - 10));
+                ball.setCurY(( panel.getHeight() / 2.0 - 10));
+                ball.setPrevX(( panel.getWidth() / 2.0 - 10));
+                ball.setPrevY(( panel.getHeight() / 2.0 - 10));
 
 
                 ball.setVelX(Math.random() > 0.5 ? ball.getORIGINAL_SPEED() : -ball.getORIGINAL_SPEED());

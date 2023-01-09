@@ -4,8 +4,6 @@ import java.awt.*;
 
 class Ball {
 
-    private PongPane panel;
-
     final int radius = 15;
 
     double curX, curY;
@@ -16,12 +14,11 @@ class Ball {
     double velX = Math.random() > 0.5 ? ORIGINAL_SPEED : -ORIGINAL_SPEED;
     double velY = Math.random() > 0.5 ? ORIGINAL_SPEED : -ORIGINAL_SPEED;
 
-    public Ball(int x, int y, PongPane panel) {
+    public Ball(int x, int y) {
         this.curX = x;
         this.curY = y;
         prevX = x;
         prevY = y;
-        this.panel = panel;
     }
 
     void draw(Graphics g){

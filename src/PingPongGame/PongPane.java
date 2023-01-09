@@ -85,7 +85,7 @@ public class PongPane extends JPanel {
 
         playerOne = new Entity(10, frame.getHeight() / 2 - 70);
         playerTwo = new Entity(frame.getWidth() - 45, frame.getHeight() / 2 - 70);
-        ball      = new Ball(( frame.getWidth() / 2 - 10), (frame.getHeight() / 2 - 10), this);
+        ball      = new Ball(( frame.getWidth() / 2 - 10), (frame.getHeight() / 2 - 10));
 
         handler = new MovementHandler(ball, this, playerOne, playerTwo);
 
