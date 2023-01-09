@@ -6,7 +6,7 @@ class Ball {
 
     private PongPane panel;
 
-    final int radius = 20;
+    final int radius = 15;
 
     double curX, curY;
     double prevX, prevY;

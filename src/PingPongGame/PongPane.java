@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLOutput;
 
 public class PongPane extends JPanel {
     PongFrame frame;
@@ -19,11 +18,20 @@ public class PongPane extends JPanel {
 
     final int SCORE_TO_WIN = 3;
 
+    final double acceleration = 1.05;
+
     MovementHandler handler;
 
     Thread repaintFrame = new Thread(() -> {
         while (true){
-            System.out.print("");
+
+            //small time delay, needed for swing to work properly, dont ask
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             while(isPlayable) {
 
                 ball.move();
@@ -41,15 +49,13 @@ public class PongPane extends JPanel {
 
     Thread backgroundMusic = new Thread(() -> {
         String soundName = "./src/PingPongGame/megalovania.wav";
-        AudioInputStream audioInputStream = null;
+        AudioInputStream audioInputStream;
         try {
             audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
-        } catch (UnsupportedAudioFileException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
+        } catch (UnsupportedAudioFileException | IOException e) {
             throw new RuntimeException(e);
         }
-         clip = null;
+        clip = null;
         try {
             clip = AudioSystem.getClip();
         } catch (LineUnavailableException e) {
@@ -57,9 +63,7 @@ public class PongPane extends JPanel {
         }
         try {
             clip.open(audioInputStream);
-        } catch (LineUnavailableException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
+        } catch (LineUnavailableException | IOException e) {
             throw new RuntimeException(e);
         }
 
@@ -122,7 +126,7 @@ public class PongPane extends JPanel {
     private void showScore(Graphics g) {
         clip.stop();
 
-        String soundName = "";
+        String soundName;
         if(playerOne.getScore() == SCORE_TO_WIN){
             winner = "Player one";
             soundName = "./src/PingPongGame/sif.wav";
@@ -132,12 +136,10 @@ public class PongPane extends JPanel {
             soundName = "./src/PingPongGame/subway_surfer.wav";
         }
 
-        AudioInputStream audioInputStream = null;
+        AudioInputStream audioInputStream;
         try {
             audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
-        } catch (UnsupportedAudioFileException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
+        } catch (UnsupportedAudioFileException | IOException e) {
             throw new RuntimeException(e);
         }
         clip = null;
@@ -148,9 +150,7 @@ public class PongPane extends JPanel {
         }
         try {
             clip.open(audioInputStream);
-        } catch (LineUnavailableException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
+        } catch (LineUnavailableException | IOException e) {
             throw new RuntimeException(e);
         }
 
@@ -188,8 +188,8 @@ public class PongPane extends JPanel {
             ball.velX *= -1;
 
             //make the ball a little faster
-            ball.velX *= 1.1;
-            ball.velY *= 1.1;
+            ball.velX *= acceleration;
+            ball.velY *= acceleration;
 
             playAudio("./src/PingPongGame/clang.wav");
         }
@@ -208,8 +208,8 @@ public class PongPane extends JPanel {
             ball.velX *= -1;
 
             //make the ball a little fast
-            ball.velX *= 1.1;
-            ball.velY *= 1.1;
+            ball.velX *= acceleration;
+            ball.velY *= acceleration;
 
             playAudio("./src/PingPongGame/clang.wav");
 
@@ -240,10 +240,10 @@ public class PongPane extends JPanel {
     }
 
     private void resetBall(){
-        ball.setCurX((  frame.getWidth () / 2 - 10));
-        ball.setCurY((  frame.getHeight() / 2 - 10));
-        ball.setPrevX(( frame.getWidth () / 2 - 10));
-        ball.setPrevY(( frame.getHeight() / 2 - 10));
+        ball.setCurX((  frame.getWidth () / 2.0 - 10));
+        ball.setCurY((  frame.getHeight() / 2.0 - 10));
+        ball.setPrevX(( frame.getWidth () / 2.0 - 10));
+        ball.setPrevY(( frame.getHeight() / 2.0 - 10));
 
 
         ball.setVelX(Math.random() > 0.5 ? ball.getORIGINAL_SPEED() : -ball.getORIGINAL_SPEED());
@@ -254,13 +254,13 @@ public class PongPane extends JPanel {
     private void playAudio (String soundName){
 
         Thread t1 = new Thread(() -> {
-            AudioInputStream audioInputStream = null;
+            AudioInputStream audioInputStream;
             try {
                 audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
             } catch (UnsupportedAudioFileException | IOException e) {
                 throw new RuntimeException(e);
             }
-            Clip clip = null;
+            Clip clip;
             try {
                 clip = AudioSystem.getClip();
             } catch (LineUnavailableException e) {
