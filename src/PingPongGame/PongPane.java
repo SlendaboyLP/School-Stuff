@@ -85,7 +85,6 @@ public class PongPane extends JPanel {
 
         handler = new MovementHandler(ball, this, playerOne, playerTwo);
 
-
         this.addKeyListener(handler);
         this.addMouseWheelListener(handler);
         this.setBackground(new Color(0,0,0));
@@ -98,11 +97,11 @@ public class PongPane extends JPanel {
     public void paint(Graphics g) {
         super.paint(g);
         g.setColor(new Color(255,255,255));
+        g.setFont(new Font("Comic Sans MS",Font.PLAIN, 30));
 
         isPlayable = !(playerOne.getScore() == SCORE_TO_WIN || playerTwo.getScore() == SCORE_TO_WIN);
 
-        g.setFont(new Font("Comic Sans MS",Font.PLAIN, 30));
-
+        //if the game hasnt ended yet it will redraw paddles and the ball at their correct postion
         if(isPlayable){
             playerOne.draw(g);
             playerTwo.draw(g);
@@ -110,91 +109,65 @@ public class PongPane extends JPanel {
 
             g.drawString(
                     playerOne.getScore() + " / " + playerTwo.getScore(),
-                    frame.getWidth() / 2 - 70,
+                    frame.getWidth() / 2 - 50,
                     30
             );
-
-        } else {
-
-            clip.stop();
-            if(playerOne.getScore() == SCORE_TO_WIN){
-                winner = "Player one";
-
-                String soundName = "./src/PingPongGame/sif.wav";
-                AudioInputStream audioInputStream = null;
-                try {
-                    audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
-                } catch (UnsupportedAudioFileException e) {
-                    throw new RuntimeException(e);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                clip = null;
-                try {
-                    clip = AudioSystem.getClip();
-                } catch (LineUnavailableException e) {
-                    throw new RuntimeException(e);
-                }
-                try {
-                    clip.open(audioInputStream);
-                } catch (LineUnavailableException e) {
-                    throw new RuntimeException(e);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-
-                FloatControl volumeGainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-                volumeGainControl.setValue(-7.0f);
-                clip.start();
-
-
-            } else {
-                winner = "Player two";
-
-                String soundName = "./src/PingPongGame/subway_surfer.wav";
-                AudioInputStream audioInputStream = null;
-                try {
-                    audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
-                } catch (UnsupportedAudioFileException e) {
-                    throw new RuntimeException(e);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                clip = null;
-                try {
-                    clip = AudioSystem.getClip();
-                } catch (LineUnavailableException e) {
-                    throw new RuntimeException(e);
-                }
-                try {
-                    clip.open(audioInputStream);
-                } catch (LineUnavailableException e) {
-                    throw new RuntimeException(e);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-
-                FloatControl volumeGainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-                volumeGainControl.setValue(-5.0f);
-
-                clip.start();
-            }
-
-            g.drawString(
-                    winner + " won!",
-                    frame.getWidth() / 2 - 100,
-                    frame.getHeight() / 2 - 15
-            );
-
-            g.drawString(
-                    "Press Space to restart",
-                    frame.getWidth() / 2 - 100,
-                    frame.getHeight() / 2 + 15
-            );
-
+            return;
         }
 
+        //show the win screen if the score of one player got to the winning score
+        showScore(g);
+    }
 
+    private void showScore(Graphics g) {
+        clip.stop();
+
+        String soundName = "";
+        if(playerOne.getScore() == SCORE_TO_WIN){
+            winner = "Player one";
+            soundName = "./src/PingPongGame/sif.wav";
+
+        } else {
+            winner = "Player two";
+            soundName = "./src/PingPongGame/subway_surfer.wav";
+        }
+
+        AudioInputStream audioInputStream = null;
+        try {
+            audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
+        } catch (UnsupportedAudioFileException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        clip = null;
+        try {
+            clip = AudioSystem.getClip();
+        } catch (LineUnavailableException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            clip.open(audioInputStream);
+        } catch (LineUnavailableException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        FloatControl volumeGainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+        volumeGainControl.setValue(-5.0f);
+
+        g.drawString(
+                winner + " won!",
+                frame.getWidth() / 2 - 150,
+                frame.getHeight() / 2 - 30
+        );
+
+        g.drawString(
+                "Press Space to restart",
+                frame.getWidth() / 2 - 150,
+                frame.getHeight() / 2
+        );
 
     }
 
@@ -214,7 +187,7 @@ public class PongPane extends JPanel {
             //deflect
             ball.velX *= -1;
 
-            //make the ball a little fast
+            //make the ball a little faster
             ball.velX *= 1.1;
             ball.velY *= 1.1;
 
@@ -252,49 +225,39 @@ public class PongPane extends JPanel {
             playerTwo.setScore(
                     playerTwo.getScore() + 1
             );
+            resetBall();
 
-            ball.setCurX(( frame.getWidth() / 2 - 10));
-            ball.setCurY(( frame.getHeight() / 2 - 10));
-            ball.setPrevX(( frame.getWidth() / 2 - 10));
-            ball.setPrevY(( frame.getHeight() / 2 - 10));
-
-
-            ball.setVelX(Math.random() > 0.5 ? ball.getORIGINAL_SPEED() : -ball.getORIGINAL_SPEED());
-            ball.setVelY(Math.random() > 0.5 ? ball.getORIGINAL_SPEED() : -ball.getORIGINAL_SPEED());
         }
-
         //if ball hits right hand side wall
         if (ball.curX + ball.radius >= this.getWidth()){
 
             playerOne.setScore(
                     playerOne.getScore() + 1
             );
-
-
-
-            ball.setCurX(( frame.getWidth() / 2 - 10));
-            ball.setCurY(( frame.getHeight() / 2 - 10));
-            ball.setPrevX(( frame.getWidth() / 2 - 10));
-            ball.setPrevY(( frame.getHeight() / 2 - 10));
-
-
-            ball.setVelX(Math.random() > 0.5 ? ball.getORIGINAL_SPEED() : -ball.getORIGINAL_SPEED());
-            ball.setVelY(Math.random() > 0.5 ? ball.getORIGINAL_SPEED() : -ball.getORIGINAL_SPEED());
+            resetBall();
         }
 
+    }
+
+    private void resetBall(){
+        ball.setCurX((  frame.getWidth () / 2 - 10));
+        ball.setCurY((  frame.getHeight() / 2 - 10));
+        ball.setPrevX(( frame.getWidth () / 2 - 10));
+        ball.setPrevY(( frame.getHeight() / 2 - 10));
+
+
+        ball.setVelX(Math.random() > 0.5 ? ball.getORIGINAL_SPEED() : -ball.getORIGINAL_SPEED());
+        ball.setVelY(Math.random() > 0.5 ? ball.getORIGINAL_SPEED() : -ball.getORIGINAL_SPEED());
     }
 
 
     private void playAudio (String soundName){
 
-
         Thread t1 = new Thread(() -> {
             AudioInputStream audioInputStream = null;
             try {
                 audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
-            } catch (UnsupportedAudioFileException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
+            } catch (UnsupportedAudioFileException | IOException e) {
                 throw new RuntimeException(e);
             }
             Clip clip = null;
@@ -305,9 +268,7 @@ public class PongPane extends JPanel {
             }
             try {
                 clip.open(audioInputStream);
-            } catch (LineUnavailableException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
+            } catch (LineUnavailableException | IOException e) {
                 throw new RuntimeException(e);
             }
 
