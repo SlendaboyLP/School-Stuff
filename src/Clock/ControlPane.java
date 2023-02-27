@@ -73,7 +73,7 @@ public class ControlPane extends JPanel {
             min = min.strip();
             sec = sec.strip();
 
-            String time = hour + min + sec;
+            String time = hour +  min + sec;
 
             pane.addTime(time);
 
@@ -90,9 +90,5 @@ public class ControlPane extends JPanel {
         this.add(alarmText);
 
     }
-
-
-
-
 }
 
