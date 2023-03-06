@@ -13,6 +13,7 @@ public class CopyFrame extends JFrame {
         CopyPanel panel = new CopyPanel(this);
         this.setContentPane(panel);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false);
         this.setVisible(true);
     }
 
