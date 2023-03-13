@@ -76,27 +76,49 @@ public class CopyPanel extends JPanel {
         if(nameField.getText().equals("")) return;
         if(file == null) return;
 
-        progressBar.setMaximum((int) file.length());
+        progressBar.setMaximum(100);
+        int one = (int) (file.length()/100) != 0 ? (int) (file.length()/100) : 1;
+
         progressBar.setValue(0);
 
-        try {
-            FileInputStream fileInputStream = new FileInputStream(file);
-            FileOutputStream fileOutputStream = new FileOutputStream("/home/alexander/Documents/Java/School-Stuff/src/FileCopy/"+nameField.getText());
-            byte[] buffer = new byte[4096];
+        CopyPanel that = this;
+
+
+        Thread copy = new Thread(() -> {
             int bytes_read;
-            while ((bytes_read = fileInputStream.read(buffer)) != -1){
-                fileOutputStream.write(buffer, 0, bytes_read);
-                progressBar.setValue(progressBar.getValue() + bytes_read);
-                this.repaint();
+            try {
+                FileInputStream fileInputStream = new FileInputStream(file);
+                FileOutputStream fileOutputStream = new FileOutputStream("/home/alexander/Documents/Java/School-Stuff/src/FileCopy/"+nameField.getText());
+                byte[] buffer = new byte[8192];
+
+                long progressBarValue = 0;
+
+                while ((bytes_read = fileInputStream.read(buffer)) != -1){
+
+                    fileOutputStream.write(buffer, 0, bytes_read);
+                    progressBarValue += bytes_read;
+
+                    progressBar.setValue((int) (progressBarValue/one));
+                    that.repaint();
+                }
+
+
+                progressBar.setValue(100);
+
+                fileInputStream.close();
+                fileOutputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
-            fileInputStream.close();
-            fileOutputStream.close();
+
+        });
+
+        copy.start();
 
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
+
 
     }
 }
