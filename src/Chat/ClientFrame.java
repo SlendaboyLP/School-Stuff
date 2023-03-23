@@ -1,0 +1,95 @@
+package Chat;
+
+import javax.swing.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+
+class ClientPane extends JPanel {
+    int width;
+    int height;
+    ClientFrame frame;
+
+    Client client;
+
+    public ClientPane(ClientFrame frame) {
+        this.frame = frame;
+        this.width = frame.width;
+        this.height = frame.height;
+        this.setSize(width,height);
+        this.setLayout(null);
+
+        this.client = new Client("localhost", 21);
+
+        JTextField field = new JTextField();
+        field.setBounds(10,10,100,30);
+        this.add(field);
+
+        JButton btn = new JButton("send");
+        btn.setBounds(10,50,70,30);
+        btn.addActionListener(e -> {
+            client.writeToServer(field.getText());
+        });
+        this.add(btn);
+
+
+
+
+    }
+}
+
+class ClientFrame extends JFrame{
+    int width=800;
+    int height=600;
+
+    ClientPane pane;
+
+    ClientFrame(){
+        super("Client");
+        this.pane = new ClientPane(this);
+        this.setContentPane(pane);
+        this.setSize(width,height);
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        this.setVisible(true);
+        this.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                pane.client.closeClient();
+                System.exit(0);
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
+            }
+        });
+    }
+    public static void main(String[] args) {
+        new ClientFrame();
+    }
+}

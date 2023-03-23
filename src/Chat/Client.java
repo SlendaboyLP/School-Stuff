@@ -10,32 +10,32 @@ public class Client {
     Socket socket;
     PrintWriter writer;
     BufferedReader reader;
-    BufferedReader stdIn;
 
-    public Client() {
+    public Client(String path, int port) {
 
         try {
-            this.socket = new Socket("localhost", 21);
-            this.writer = new PrintWriter(socket.getOutputStream());
+            this.socket = new Socket(path, port);
+            this.writer = new PrintWriter(socket.getOutputStream(),true);
             this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
-            this.stdIn = new BufferedReader(new InputStreamReader(System.in));
-
-            String userInput = "Hello World";
-
-            writer.println(userInput);
-
-            writer.close();
-            reader.close();
-            stdIn.close();
-            socket.close();
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static void main(String[] args) {
-        new Client();
+    public void closeClient(){
+        try {
+            writer.close();
+            reader.close();
+            socket.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
+
+    public void writeToServer(String text){
+        System.out.println(text);
+        this.writer.println(text);
+    }
+
+
 }
