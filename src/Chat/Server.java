@@ -11,10 +11,11 @@ public class Server {
 
     boolean isConnected = true;
 
-    public Server() {
+    public Server(int port) {
 
         try {
-            this.serverSocket = new ServerSocket(21);
+
+            this.serverSocket = new ServerSocket(port);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -34,11 +35,11 @@ public class Server {
                     }  out.write((char)c);
 
 
-                    System.out.println("Verbindung beenden");
                     in.close();
                     out.close();
                     clientSocket.close();
-//                    serverSocket.close();
+                    System.out.println("Verbindung beenden");
+
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -51,7 +52,17 @@ public class Server {
 
     }
 
+    public void closeServer(){
+
+        try {
+            clientSocket.close();
+            serverSocket.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void main(String[] args) {
-        new Server();
+        new Server(21);
     }
 }

@@ -11,6 +11,10 @@ class ClientPane extends JPanel {
 
     Client client;
 
+    JButton connect;
+    JButton disconnect;
+    JTextField ipInput;
+
     public ClientPane(ClientFrame frame) {
         this.frame = frame;
         this.width = frame.width;
@@ -18,7 +22,7 @@ class ClientPane extends JPanel {
         this.setSize(width,height);
         this.setLayout(null);
 
-        this.client = new Client("localhost", 21);
+
 
         JTextField field = new JTextField();
         field.setBounds(10,10,100,30);
@@ -26,13 +30,36 @@ class ClientPane extends JPanel {
 
         JButton btn = new JButton("send");
         btn.setBounds(10,50,70,30);
-        btn.addActionListener(e -> {
-            client.writeToServer(field.getText());
-        });
+        btn.addActionListener(e -> client.writeToServer(field.getText()));
         this.add(btn);
 
 
 
+        this.ipInput = new JTextField();
+        ipInput.setBounds(this.getWidth()-120,10,100,50);
+        this.add(ipInput);
+
+        this.connect = new JButton("Connect");
+        connect.setBounds(this.getWidth()- 120, 70,100,50);
+        connect.addActionListener(e -> {
+            String pathAndIp = ipInput.getText();
+            if(pathAndIp.equals("")) return;
+
+            String path = pathAndIp.split(":")[0];
+            String ip = pathAndIp.split(":")[1];
+
+            this.client = new Client(path, Integer.parseInt(ip));
+            this.frame.setTitle("Connected to: " + pathAndIp);
+        });
+        this.add(connect);
+
+        this.disconnect = new JButton("Disconnect");
+        disconnect.setBounds(this.getWidth()-120, 130,100,50);
+        disconnect.addActionListener(e -> {
+            this.client.closeClient();
+            this.frame.setTitle("Client");
+        });
+        this.add(disconnect);
 
     }
 }

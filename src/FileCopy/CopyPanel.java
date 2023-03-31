@@ -63,7 +63,7 @@ public class CopyPanel extends JPanel {
 
 
     public void openFile(){
-        JFileChooser fileChooser = new JFileChooser("/home/alexander/Documents/Java/School-Stuff/src/FileCopy");
+        JFileChooser fileChooser = new JFileChooser("C:\\Users\\alexz\\IdeaProjects\\School-Stuff\\src\\FileCopy");
         int i = fileChooser.showOpenDialog(frame);
         if(i == JFileChooser.APPROVE_OPTION){
             file = fileChooser.getSelectedFile();
@@ -71,6 +71,7 @@ public class CopyPanel extends JPanel {
             progressBar.setValue(0);
         }
     }
+
 
     public void copyFile(){
         if(nameField.getText().equals("")) return;
@@ -88,7 +89,7 @@ public class CopyPanel extends JPanel {
             int bytes_read;
             try {
                 FileInputStream fileInputStream = new FileInputStream(file);
-                FileOutputStream fileOutputStream = new FileOutputStream("/home/alexander/Documents/Java/School-Stuff/src/FileCopy/"+nameField.getText());
+                FileOutputStream fileOutputStream = new FileOutputStream("C:\\Users\\alexz\\IdeaProjects\\School-Stuff\\src\\FileCopy\\"+nameField.getText());
                 byte[] buffer = new byte[8192];
 
                 long progressBarValue = 0;
@@ -102,7 +103,6 @@ public class CopyPanel extends JPanel {
                     that.repaint();
                 }
 
-
                 progressBar.setValue(100);
 
                 fileInputStream.close();
@@ -115,10 +115,6 @@ public class CopyPanel extends JPanel {
         });
 
         copy.start();
-
-
-
-
-
+//new FileOutputStream("moge.txt",true);
     }
 }
