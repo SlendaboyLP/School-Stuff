@@ -11,8 +11,34 @@ public class Server {
 
     boolean isConnected = true;
 
-    public Server(int port) {
+    ServerPane pane;
+    Thread t = new Thread(() -> {
+        while(isConnected){
+            try {
 
+                InputStream in = clientSocket.getInputStream();
+
+                int c;
+
+                this.pane.log.append("Client: ");
+                while ((c = in.read()) != -1) {
+                    this.pane.log.append(""+(char)c);
+                } this.pane.log.append(""+(char)c);
+
+
+                in.close();
+                clientSocket.close();
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    });
+
+
+    public Server(int port, ServerPane pane) {
+
+        this.pane = pane;
         try {
 
             this.serverSocket = new ServerSocket(port);
@@ -20,36 +46,41 @@ public class Server {
             throw new RuntimeException(e);
         }
 
-        Thread t = new Thread(() -> {
-            while(isConnected){
-                try {
-                    this.clientSocket = serverSocket.accept();
+        Thread t1 = new Thread(() -> {
+            try {
+                clientSocket = serverSocket.accept();
+                InputStream in = clientSocket.getInputStream();
+                OutputStream out = clientSocket.getOutputStream();
+                int c;
 
-                    System.out.println("Verbindung hergestellt: " + clientSocket.toString());
-                    InputStream in = clientSocket.getInputStream();
-                    OutputStream out = clientSocket.getOutputStream();
-
-                    int c;
-                    while ((c = in.read()) != -1) {
-                        System.out.print((char)c);
-                    }  out.write((char)c);
-
-
-                    in.close();
-                    out.close();
-                    clientSocket.close();
-                    System.out.println("Verbindung beenden");
-
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                while ((c = in.read()) != -1) {
+                    this.pane.log.append(""+(char)c);
+//                    System.out.print((char)c);
                 }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-            });
 
-            t.start();
+        });
+
+        t1.start();
 
 
 
+
+
+
+    }
+
+    public void writeToClient(String text){
+        try {
+            OutputStream out = clientSocket.getOutputStream();
+            PrintWriter pr = new PrintWriter(out, true);
+            pr.println("Server: " + text);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void closeServer(){
@@ -62,7 +93,4 @@ public class Server {
         }
     }
 
-    public static void main(String[] args) {
-        new Server(21);
-    }
 }

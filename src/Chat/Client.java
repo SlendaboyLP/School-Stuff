@@ -1,9 +1,6 @@
 package Chat;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 
 public class Client {
@@ -11,7 +8,12 @@ public class Client {
     PrintWriter writer;
     BufferedReader reader;
 
-    public Client(String path, int port) {
+    Boolean isConnected = true;
+    ClientPane pane;
+
+    public Client(String path, int port, ClientPane pane) {
+
+        this.pane = pane;
 
         try {
             this.socket = new Socket(path, port);
@@ -20,6 +22,26 @@ public class Client {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+
+        Thread t = new Thread(() -> {
+            while(isConnected){
+                try {
+
+                    int c;
+                    while ((c = reader.read()) != -1) {
+                        this.pane.log.append(""+(char)c);
+                    }
+
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+
+        t.start();
+
     }
 
     public void closeClient(){
@@ -33,8 +55,7 @@ public class Client {
     }
 
     public void writeToServer(String text){
-        System.out.println(text);
-        this.writer.println(text);
+        this.writer.println("Client: " + text);
     }
 
 
