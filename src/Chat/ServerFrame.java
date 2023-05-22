@@ -4,7 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.io.BufferedReader;
+import java.io.*;
+import java.util.GregorianCalendar;
 
 public class ServerFrame extends JFrame {
     int width=800;
@@ -31,7 +32,7 @@ class ServerPane extends JPanel{
     ServerFrame frame;
     JTextField portInput;
     JButton startServer;
-    JButton stopServer;
+    JButton saveLog;
 
     Server server;
     JTextArea log;
@@ -90,20 +91,37 @@ class ServerPane extends JPanel{
         startServer.setBounds(this.getWidth()-120,70,100,50);
         startServer.addActionListener(e -> {
             server = new Server(Integer.parseInt(portInput.getText()), this);
-            frame.setTitle("running on port: "+ portInput.getText());
+            frame.setTitle("Server - running on port: "+ portInput.getText());
         });
         this.add(startServer);
 
-        stopServer = new JButton("Stop");
-        stopServer.setBounds(this.getWidth()-120,130,100,50);
-        stopServer.addActionListener(e -> {
-            server.closeServer();
-            frame.setTitle("Server");
+        saveLog = new JButton("Save");
+        saveLog.setBounds(this.getWidth()-120,130,100,50);
+        saveLog.addActionListener(e -> {
+            saveToFile();
         });
-//        this.add(stopServer);
+        this.add(saveLog);
 
         this.setFocusable(true);
         this.requestFocus();
 
+
+    }
+
+    private void saveToFile(){
+        GregorianCalendar cal = new GregorianCalendar();
+        JFileChooser chooser = new JFileChooser("C:\\Users\\alexz\\IdeaProjects\\School-Stuff\\src\\Chat\\logs");
+
+        FileWriter fw;
+        try {
+
+            chooser.showOpenDialog(null);
+
+            fw = new FileWriter(chooser.getSelectedFile());
+
+            fw.write(log.getText());
+
+            fw.close();
+        }catch (IOException ie){}
     }
 }

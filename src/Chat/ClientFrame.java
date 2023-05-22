@@ -6,6 +6,10 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.GregorianCalendar;
 
 class ClientPane extends JPanel {
     int width;
@@ -13,7 +17,7 @@ class ClientPane extends JPanel {
     ClientFrame frame;
     Client client;
     JButton connect;
-    JButton disconnect;
+    JButton saveLog;
     JTextField ipInput;
 
     JTextArea log;
@@ -83,20 +87,37 @@ class ClientPane extends JPanel {
             String ip = pathAndIp.split(":")[1];
 
             this.client = new Client(path, Integer.parseInt(ip), this);
-            this.frame.setTitle("Connected to: " + pathAndIp);
+            this.frame.setTitle("Client - Connected to: " + pathAndIp);
         });
 
 
         this.add(connect);
 
-        this.disconnect = new JButton("Disconnect");
-        disconnect.setBounds(this.getWidth()-120, 130,100,50);
-        disconnect.addActionListener(e -> {
-            this.client.closeClient();
-            this.frame.setTitle("Client");
+        this.saveLog = new JButton("Save");
+        saveLog.setBounds(this.getWidth()-120, 130,100,50);
+        saveLog.addActionListener(e -> {
+            saveToFile();
         });
-//        this.add(disconnect);
+        this.add(saveLog);
 
+    }
+
+
+    private void saveToFile(){
+        GregorianCalendar cal = new GregorianCalendar();
+        JFileChooser chooser = new JFileChooser("C:\\Users\\alexz\\IdeaProjects\\School-Stuff\\src\\Chat\\logs");
+
+        FileWriter fw;
+        try {
+
+            chooser.showOpenDialog(null);
+
+            fw = new FileWriter(chooser.getSelectedFile());
+
+            fw.write(log.getText());
+
+            fw.close();
+        }catch (IOException ie){}
     }
 }
 
